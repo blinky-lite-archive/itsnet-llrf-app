@@ -18,7 +18,7 @@ var ipAddress;
 
 var mqttClient = mqtt.connect('tcp://broker.shiftr.io', 
 {
-  clientId: 'itsnet-test-app',
+  clientId: 'itsnet-llrf-app',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
