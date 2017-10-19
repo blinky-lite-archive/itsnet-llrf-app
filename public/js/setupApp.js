@@ -49,34 +49,5 @@ function setupApp()
         socket.on('klyPlcProtoPsu/set',  function(message) {psuGearBox.setGearBoxValues(new Int8Array(message), false);});
         socket.on('klyPlcProtoDio/set',  function(message) {dioGearBox.setGearBoxValues(new Int8Array(message), false);});
     });
-    socket.emit('initData', 'Give me initial data from Server');
+    setTimeout(function(){socket.emit('initData', 'Give me initial data from Server');}, 2000);
 }
-function resetKlystronCpu(data)
-{
-    console.log('booger');
-/*    byteGearBoxArray.forEach(function(element)
-    {
-        if (element.gearBox.topic == 'klyPlcProtoCpu')
-        {
-            getGearBoxByteTooth('RESET',       getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'TRUE';
-            getGearBoxByteTooth('OFF_CMD',     getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('AUX_CMD',     getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('FIL_CMD',     getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('STBY_CMD',    getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('HV_CMD'  ,    getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('RF_CMD',      getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('TEST_ALL_AD', getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('WR_DATA',     getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'TRUE';
-            var setBuffer = new ArrayBuffer(element.gearBox.writeByteLength);
-            var intView8 = new Int8Array(setBuffer);
-            var setBuffer2 = new ArrayBuffer(element.gearBox.writeByteLength * 2);
-            var intView82 = new Int8Array(setBuffer2);
-            getGearBoxByteData(intView8, element.gearBox, false);
-            for (var ii = 0; ii < element.gearBox.writeByteLength; ++ii) intView82[ii] = intView8[ii];
-            getGearBoxByteTooth('RESET',       getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteTooth('WR_DATA',     getGearBoxByteGear('CPU_CONF', element.gearBox), false).value = 'FALSE';
-            getGearBoxByteData(intView8, element.gearBox, false);
-            for (var ii = 0; ii < element.gearBox.writeByteLength; ++ii) intView82[ii + element.gearBox.writeByteLength] = intView8[ii];
-        }
-    });
-*/}

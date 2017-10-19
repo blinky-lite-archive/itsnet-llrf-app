@@ -145,7 +145,7 @@ function drawChart()
         redTo: 1600
     };
     forwardPowerGaugeChart = new google.visualization.Gauge(document.getElementById(forwardPowerGaugeParentId + "-gaugeCell"));
-    forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
+//    forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
 }
 function updateGaugePlots(data)
 {
