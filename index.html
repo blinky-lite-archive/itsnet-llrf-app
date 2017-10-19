@@ -11,9 +11,12 @@
     <script src="/js/rfSigGenClient.js"></script>  
     <script src="/js/fastInterlockClient.js"></script>  
     <script src="/js/googleGaugeClient.js"></script>  
+    <script src="/js/timeLineFreqClient.js"></script>  
+    <script src="/js/googleLineChartClient.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://cdn.auth0.com/js/lock/10.20.0/lock.min.js"></script>
     <script src="/js/login.js"></script>  
+    <script src="/js/byteGearBoxClass.js"></script>  
     <script src="/js/setupApp.js"></script>  
 </head>
 
@@ -28,19 +31,21 @@
         <div>
             <div id='llrfTimerTable'      style="left:5px;   top:50px;  width:320px; position:absolute;"></div>
             <div id='modulatorTimerTable' style="left:330px; top:50px;  width:320px; position:absolute;"></div>
-            <div id='googleGauge'         style="left:655px; top:50px;  width:230px; position:absolute;"></div>
-        </div>
-        <div>
-            <div id='rfSigGenGui'         style="left:5px;   top:400px; width:210px; position:absolute;"></div>
-            <div id='fastInterlockGui'    style="left:220px; top:400px; width:330px; position:absolute;"></div>
+            <div id='googleGauge'         style="left:655px; top:50px;  width:330px; position:absolute;"></div>
+            <div id='timeLineFreqGui'     style="left:655px; top:220px; width:240px; position:absolute;"></div>
+            <div id='rfSigGenGui'         style="left:655px; top:290px; width:210px; position:absolute;"></div>
+            <div id='fastInterlockGui'    style="left:655px; top:470px; width:330px; position:absolute;"></div>
+            <div id='historyLinePlot'     style="left:5px;   top:220px; width:610px; position:absolute;"></div>
         </div>
     </div>  
     <script>
         var socket;
-        let llrfTimer = new TimerCard('Scp','RF','PM','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer');
-        let modTimer  = new TimerCard('Mod','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer');
+        let llrfTimer = new TimerCard('Scp','RF','PM','Ch4', 'itsClkRecvr01/set/channel', 'LLRF Timer', 'TimerCard01');
+        let modTimer  = new TimerCard('Mod','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer', 'TimerCard02');
         let rfSigGen  = new RfSigGen('itsRfSigGen01/set/rf', 'RF Generator');
         let fastInterlock  = new FastInterlock('Fast Interlock');
+        let timeLineFreq  = new TimeLineFreq('itsClkTrans01/set/freq', 'Time Line');
+
         $( document ).ready(function() 
         {
             socket = io.connect(window.location.href);

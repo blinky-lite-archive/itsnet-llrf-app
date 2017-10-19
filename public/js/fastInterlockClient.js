@@ -6,6 +6,10 @@ class FastInterlock
         this.settingsDisabled = true;
         this.pinSwitchOn = false;
     }
+    setCpuByteGearBox(cpuByteGearBox)
+    {
+        this.cpuByteGearBox = cpuByteGearBox;
+    }
     createGui(parentId)
     {
       var _this = this; // a weird thing to do to define button click
@@ -106,9 +110,32 @@ class FastInterlock
     }
     reset()
     {
+        this.cpuByteGearBox.getGearBoxByteTooth('RESET',       this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'TRUE';
+        this.cpuByteGearBox.getGearBoxByteTooth('OFF_CMD',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('AUX_CMD',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('FIL_CMD',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('STBY_CMD',    this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('HV_CMD'  ,    this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('RF_CMD',      this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('TEST_ALL_AD', this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('WR_DATA',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'TRUE';
+        var bufLen = Number(this.cpuByteGearBox.byteGearBoxJsonData.writeByteLength);
+        var setBuffer = new ArrayBuffer(bufLen);
+        var intView8 = new Int8Array(setBuffer);
+        var setBuffer2 = new ArrayBuffer(bufLen* 2);
+        var intView82 = new Int8Array(setBuffer2);
+        this.cpuByteGearBox.getGearBoxByteData(intView8, false);
+        for (var ii = 0; ii < bufLen; ++ii) intView82[ii] = intView8[ii];
+        this.cpuByteGearBox.getGearBoxByteTooth('RESET',       this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteTooth('WR_DATA',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
+        this.cpuByteGearBox.getGearBoxByteData(intView8, false);
+        for (var ii = 0; ii < bufLen; ++ii) intView82[ii + bufLen] = intView8[ii];
+        socket.emit('publish' + this.cpuByteGearBox.byteGearBoxJsonData.topic, setBuffer2);
+
         var data = {"reset":'TRUE'};
         var data2 = {'topic':'toshibaFastInterlock/set', 'jsonData':data};
-        socket.emit('publishFastInterlockMqttTopic', data2);
+        setTimeout(function(){socket.emit('publishFastInterlockMqttTopic', data2);}, 5000);
+        
     }
     pinSwitch()
     {
@@ -140,8 +167,16 @@ class FastInterlock
             if (data['tripType'] == 'reflPower') $('#' + this.parentId + '-reflectedPowerTripLed').attr('src','images/redlight.png');
             if (data['tripType'] == 'arcDet') $('#' + this.parentId + '-cernArcTripLed').attr('src','images/redlight.png');
             if (data['tripType'] == 'aftDet') $('#' + this.parentId + '-aftArcTripLed').attr('src','images/redlight.png');
-            
         }
+        $( "#" + 'googleGauge' + "-TripCounterCell" ).html(data['tripCounter']);
+        $( "#" + 'googleGauge' + "-TripRateCell" ).html(data['tripRate']);
+
+        var tripDate = new Date(Number(data['tripDate']))
+        var datestring = tripDate.getDate()  + "-" + (tripDate.getMonth()+1) + "-" + (tripDate.getYear()-100);
+        $( "#" + 'googleGauge' + "-TripDateCell" ).html(datestring);
+        datestring = tripDate.getHours() + ":" + tripDate.getMinutes();
+        $( "#" + 'googleGauge' + "-TripDateTimeCell" ).html(datestring);
+
     }
     setDisabled(disabled) 
     {

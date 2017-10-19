@@ -167,7 +167,7 @@ class RfSigGen
         this.powLvl = Number($(  "#" + this.parentId + "-powLvl" ).val())
         var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":rfOn};
         var data2 = {'topic':this.publishTopic, 'jsonData':data};
-        socket.emit('publishRFSigGenMqttTopic', data2);
+        socket.emit('publishRfSigGenMqttTopic', data2);
 
     }
     togglePowerButton()
@@ -186,8 +186,8 @@ class RfSigGen
         }
         var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":rfOn};
         var data2 = {'topic':this.publishTopic, 'jsonData':data};
-        socket.emit('publishRFSigGenMqttTopic', data2);
-        
+        socket.emit('publishRfSigGenMqttTopic', data2);
+
     }
     inputFieldChange(id, storedValue)
     {

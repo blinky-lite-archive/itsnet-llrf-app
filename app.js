@@ -2,10 +2,77 @@ var express = require('express');
 var http = require('http');
 var socketio = require('socket.io');
 var mqtt = require('mqtt');
-var timerCard = require('./timerCardServer.js');
-var rfSigGen = require('./rfSigGenServer.js');
-var fastInterlock = require('./fastInterlockServer.js');
-var googleGauge = require('./googleGaugeServer.js');
+var byteGearBoxForNode = require('./byteGearBoxForNode.js')
+
+var deviceMqttArray = 
+[
+  {
+    'name':'PowerGauge',
+    'setTopic':'itsPowerMeter01/get',
+    'setMessage':{"power1":"0", "power2":"0"}, 
+    'echoTopic':'itsPowerMeter01/get'
+   },
+  {
+    'name':'TimerCard01',
+    'setTopic':'itsClkRecvr01/set/channel',
+    'setMessage':{"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}, 
+    'echoTopic':'itsClkRecvr01/echo/channel',
+    'getTopic':'itsClkRecvr01/get/channel'
+  },
+  {
+    'name':'TimerCard02',
+    'setTopic':'itsClkRecvr02/set/channel',
+    'setMessage':{"channel1":"1 1 2","channel2":"1 1 2","channel4":"1 1 2","channel3":"1 1 2"}, 
+    'echoTopic':'itsClkRecvr02/echo/channel',
+    'getTopic':'itsClkRecvr02/get/channel'
+  },
+  {
+    'name':'FastInterlock',
+    'setTopic':'toshibaFastInterlock/get',
+    'setMessage':{"reflPowLvl":"0.143", "pinSwitch":"ON", "trip":"TRUE", "tripType":"arcDet"}, 
+    'echoTopic':'toshibaFastInterlock/echo',
+    'getTopic':'toshibaFastInterlock/status'
+  },
+  {
+    'name':'RfSigGen',
+    'setTopic':'itsRfSigGen01/set/rf',
+    'setMessage':{"rfFreq":"704.42","rfPowLvl":"-20","rfPowOn":"OFF"}, 
+    'echoTopic':'itsRfSigGen01/echo/rf',
+    'getTopic':'itsRfSigGen01/get/rf'
+  },
+  {
+    'name':'TimeLineFreq',
+    'setTopic':'itsClkTrans01/set/freq',
+    'setMessage':{"freq":"10"},
+    'echoTopic':'itsClkTrans01/echo/freq',
+    'getTopic':'itsClkTrans01/get/freq'
+  }
+];
+var byteGearBoxParentUrl = 'https://aig.esss.lu.se:8443/IceCubeDeviceProtocols/gearbox/';
+var byteGearBoxArray = 
+[
+  {
+    'parentUrl':byteGearBoxParentUrl, 
+    'topic':'klyPlcProtoCpu',
+    'gearBox':{}
+  },
+  {
+    'parentUrl':byteGearBoxParentUrl, 
+    'topic':'klyPlcProtoAio',
+    'gearBox':{}
+  },
+  {
+    'parentUrl':byteGearBoxParentUrl, 
+    'topic':'klyPlcProtoPsu',
+    'gearBox':{}
+  },
+  {
+    'parentUrl':byteGearBoxParentUrl, 
+    'topic':'klyPlcProtoDio',
+    'gearBox':{}
+  }
+];
+
 
 var app = express();
 var server = http.createServer(app);
@@ -46,25 +113,114 @@ io.on('connection', function(browserClient)
 {
   console.log('Number of connected clients: ' + ++clientsConnected);
   browserClient.on('join', function(data){console.log(data);});
+  browserClient.on('initData', function(data)
+  {
+//    console.log(data);
+    deviceMqttArray.forEach(function(deviceMqtt){io.sockets.emit(deviceMqtt.setTopic, deviceMqtt.setMessage);});
+    io.sockets.emit('byteGearBoxArray', byteGearBoxArray);
+  });
   browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
-  timerCard.setupSocket(browserClient, io, mqttClient);
-  rfSigGen.setupSocket(browserClient, io, mqttClient);
-  fastInterlock.setupSocket(browserClient, io, mqttClient);
-});
+  deviceMqttArray.forEach(function(deviceMqtt) 
+  {
+//    console.log('publish' + deviceMqtt.name +'MqttTopic');
+    browserClient.on('publish' + deviceMqtt.name +'MqttTopic', function(data){publishMqtt(data);});
+  });
+  byteGearBoxArray.forEach(function(byteGearBoxArrayElement) 
+  {
+    browserClient.on('publish' + byteGearBoxArrayElement.gearBox.topic, function(data)
+    {
+      console.log('Publishing ' + byteGearBoxArrayElement.gearBox.topic);
+      mqttClient.publish(byteGearBoxArrayElement.gearBox.topic + '/set', data, {qos:0, retain:true, dup:false}, function() {});
 
+    });
+  });
+});
 
 function handleMqttMessage(topic, message)
 {
-  timerCard.handleMqtt(topic, message, io);
-  rfSigGen.handleMqtt(topic, message, io);
-  fastInterlock.handleMqtt(topic, message, io);
-  googleGauge.handleMqtt(topic, message, io);
+  deviceMqttArray.forEach(function(deviceMqtt)
+  {
+    if (topic == deviceMqtt.setTopic) 
+    {
+      deviceMqtt.setMessage = JSON.parse(message);
+      io.sockets.emit(deviceMqtt.setTopic, deviceMqtt.setMessage);
+    }
+    if (topic == deviceMqtt.echoTopic) 
+    {
+      deviceMqtt.setMessage = JSON.parse(message);
+      io.sockets.emit(deviceMqtt.setTopic, deviceMqtt.setMessage);
+    }
+  });
+  byteGearBoxArray.forEach(function(byteGearBox)
+  {
+    if (topic.indexOf(byteGearBox.gearBox.topic) > -1)
+    {
+      var sendBuffer = new ArrayBuffer(message.length);
+      var intView8 = new Int8Array(sendBuffer);
+      for (var ii = 0; ii < message.length; ++ii) intView8[ii] = message[ii];
+      if (topic == (byteGearBox.topic + '/echo/set'))
+      {
+        byteGearBoxForNode.setGearBoxValues(message, byteGearBox.gearBox, false);
+      }
+      if (topic == (byteGearBox.gearBox.topic + '/set'))
+      {
+        byteGearBoxForNode.setGearBoxValues(message, byteGearBox.gearBox, false);
+        io.sockets.emit(topic, sendBuffer);
+      }
+      if (topic == (byteGearBox.gearBox.topic + '/get'))
+      {
+        byteGearBoxForNode.setGearBoxValues(message, byteGearBox.gearBox, true);
+        io.sockets.emit(topic, sendBuffer);
+      }
+    }
+  });
+
+  if (topic.indexOf(byteGearBoxArray[1].topic + '/get') > -1)
+  {
+//    console.log(byteGearBoxForNode.getGearBoxByteTooth('EGU', byteGearBoxForNode.getGearBoxByteGear('KLY_IP_ISn_Current', byteGearBoxArray[1].gearBox), true).value);
+  }
+
+
 }
 function connectToMqtt()
 {
   console.log('Connected to MQTT broker.');
-  timerCard.subscribe(mqttClient);
-  rfSigGen.subscribe(mqttClient);
-  fastInterlock.subscribe(mqttClient);
-  googleGauge.subscribe(mqttClient);
+  byteGearBoxArray.forEach(function(byteGearBox)
+  {
+    byteGearBoxForNode.getByteGearBoxFromUrl(byteGearBox.parentUrl + byteGearBox.topic + '.json', function(jsonData) 
+    {
+      byteGearBox.gearBox = jsonData;
+      mqttClient.subscribe(byteGearBox.gearBox.topic +'/set');
+      console.log("Subscribing to " + byteGearBox.gearBox.topic +'/set');
+      mqttClient.subscribe(byteGearBox.gearBox.topic +'/get');
+      console.log("Subscribing to " + byteGearBox.gearBox.topic +'/get');
+      mqttClient.subscribe(byteGearBox.gearBox.topic +'/echo/set');
+      console.log("Subscribing to " + byteGearBox.gearBox.topic +'/echo/set');
+      mqttClient.publish(byteGearBox.gearBox.topic +'/get/set', ' ', {qos:0, retain:true, dup:false}, function() {});
+    });
+  });
+  deviceMqttArray.forEach(function(deviceMqtt)
+  {
+    if ('setTopic' in deviceMqtt)
+    {
+      console.log("Subscribing to " + deviceMqtt.setTopic);
+      mqttClient.subscribe(deviceMqtt.setTopic);
+    }
+    if ('echoTopic' in deviceMqtt)
+    {
+      console.log("Subscribing to " + deviceMqtt.echoTopic);
+      mqttClient.subscribe(deviceMqtt.echoTopic);
+    }
+    if ('getTopic' in deviceMqtt)
+    {
+      console.log("Publishing: " + deviceMqtt.getTopic);
+      mqttClient.publish(deviceMqtt.getTopic, ' ', {qos:0, retain:true, dup:false}, function() {});
+    }
+  });
+
+}
+function publishMqtt(data)
+{
+  console.log("Publishing to " + data['topic'] + " data: " + JSON.stringify(data['jsonData']));
+  mqttClient.publish(data['topic'], JSON.stringify(data['jsonData']), {qos:0, retain:true, dup:false}, function() {});
 }
