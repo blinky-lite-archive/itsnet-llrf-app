@@ -11,6 +11,8 @@ class RfSigGen
     }
     createGui(parentId)
     {
+      var upDownButtonWidth = '80px';
+      var upDownButtonHeight = '35px';
       var _this = this; // a weird thing to do to define button click
       this.parentId = parentId;
       var guiDiv = document.createElement("div");
@@ -102,8 +104,9 @@ class RfSigGen
       buttonText = document.createTextNode("-");     
       button.style.width = "5em";
       button.style.textAlign = "center";
-      button.style.width = "30px";
-      button.style.fontSize = "medium";
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
+      button.style.fontSize = "x-large";
       button.style.background='#00ff00';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-freqDownButton");
@@ -117,8 +120,9 @@ class RfSigGen
       buttonText = document.createTextNode("+");     
       button.style.width = "5em";
       button.style.textAlign = "center";
-      button.style.width = "30px";
-      button.style.fontSize = "medium";
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
+      button.style.fontSize = "x-large";
       button.style.background='#ffff00';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-freqUpButton");
@@ -160,9 +164,10 @@ class RfSigGen
       buttonText = document.createTextNode("-");     
       button.style.width = "5em";
       button.style.textAlign = "center";
-      button.style.width = "30px";
-      button.style.fontSize = "medium";
-      button.style.background='#00bb00';
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
+      button.style.fontSize = "x-large";
+      button.style.background='#00ccff';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-powerDownButton");
       button.onclick = function() { _this.stepPower(-0.1)}; 
@@ -173,11 +178,11 @@ class RfSigGen
       cell = document.createElement("td");
       button = document.createElement("BUTTON");
       buttonText = document.createTextNode("+");     
-      button.style.width = "5em";
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
       button.style.textAlign = "center";
-      button.style.width = "30px";
-      button.style.fontSize = "medium";
-      button.style.background='#bbbb00';
+      button.style.fontSize = "x-large";
+      button.style.background='#ff00ff';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-powerUpButton");
       button.onclick = function() { _this.stepPower(0.1)}; 
