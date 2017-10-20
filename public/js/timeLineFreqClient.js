@@ -73,7 +73,7 @@ class TimeLineFreq
         this.timeLineFreq = Number($(  "#" + this.parentId + "-timeLineFreq" ).val())
         var data = {"freq":this.timeLineFreq.toString()};
         var data2 = {'topic':this.publishTopic, 'jsonData':data};
-        socket.emit('publishRFSigGenMqttTopic', data2);
+        socket.emit('publishRfSigGenMqttTopic', data2);
 
     }
     inputFieldChange(id, storedValue)

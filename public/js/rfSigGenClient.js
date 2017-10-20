@@ -7,7 +7,7 @@ class RfSigGen
         this.powLvl = -20.0;
         this.powOn = false;
         this.publishTopic = publishTopic;
-        this.settingsDisabled = true;
+        this.settingsDisabled = false;
     }
     createGui(parentId)
     {
@@ -82,7 +82,7 @@ class RfSigGen
       var input = document.createElement("INPUT");
       input.setAttribute("type", "number");
       input.setAttribute("value", this.freqMhz);
-      input.setAttribute("step", "0.01");
+      input.setAttribute("step", "0.1");
       input.setAttribute("id",parentId + "-freqMhz");
       input.onchange = function(){ _this.inputFieldChange(parentId + "-freqMhz", _this.freqMhz)};
       input.style.width = "5em";
@@ -95,6 +95,36 @@ class RfSigGen
       cellText = document.createTextNode("MHz");
       cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      button = document.createElement("BUTTON");
+      buttonText = document.createTextNode("-");     
+      button.style.width = "5em";
+      button.style.textAlign = "center";
+      button.style.width = "30px";
+      button.style.fontSize = "medium";
+      button.style.background='#00ff00';
+      button.appendChild(buttonText);
+      button.setAttribute("id", parentId + "-freqDownButton");
+      button.onclick = function() { _this.stepFreq(-0.1)}; 
+      cell.style.textAlign = "center";
+      cell.appendChild(button);
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      button = document.createElement("BUTTON");
+      buttonText = document.createTextNode("+");     
+      button.style.width = "5em";
+      button.style.textAlign = "center";
+      button.style.width = "30px";
+      button.style.fontSize = "medium";
+      button.style.background='#ffff00';
+      button.appendChild(buttonText);
+      button.setAttribute("id", parentId + "-freqUpButton");
+      button.onclick = function() { _this.stepFreq(0.1)}; 
+      cell.style.textAlign = "center";
+      cell.appendChild(button);
       row.appendChild(cell);
 
       tblBody.appendChild(row);
@@ -123,6 +153,36 @@ class RfSigGen
       cell.setAttribute("class", 'cellText');
       cellText = document.createTextNode("dBm");
       cell.appendChild(cellText);
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      button = document.createElement("BUTTON");
+      buttonText = document.createTextNode("-");     
+      button.style.width = "5em";
+      button.style.textAlign = "center";
+      button.style.width = "30px";
+      button.style.fontSize = "medium";
+      button.style.background='#00bb00';
+      button.appendChild(buttonText);
+      button.setAttribute("id", parentId + "-powerDownButton");
+      button.onclick = function() { _this.stepPower(-0.1)}; 
+      cell.style.textAlign = "center";
+      cell.appendChild(button);
+      row.appendChild(cell);
+
+      cell = document.createElement("td");
+      button = document.createElement("BUTTON");
+      buttonText = document.createTextNode("+");     
+      button.style.width = "5em";
+      button.style.textAlign = "center";
+      button.style.width = "30px";
+      button.style.fontSize = "medium";
+      button.style.background='#bbbb00';
+      button.appendChild(buttonText);
+      button.setAttribute("id", parentId + "-powerUpButton");
+      button.onclick = function() { _this.stepPower(0.1)}; 
+      cell.style.textAlign = "center";
+      cell.appendChild(button);
       row.appendChild(cell);
 
       tblBody.appendChild(row);
@@ -188,6 +248,32 @@ class RfSigGen
         var data2 = {'topic':this.publishTopic, 'jsonData':data};
         socket.emit('publishRfSigGenMqttTopic', data2);
 
+    }
+    stepFreq(step)
+    {
+        if (this.settingsDisabled) return;
+        this.freqMhz = Number($(  "#" + this.parentId + "-freqMhz" ).val());
+        this.powLvl = Number($(  "#" + this.parentId + "-powLvl" ).val())
+        this.freqMhz = Math.round((this.freqMhz + step) * 100) / 100;
+        $( "#" + this.parentId + "-freqMhz" ).val(this.freqMhz);
+        var rfOn = $( "#" + this.parentId + "-onButton" ).html();
+        var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":rfOn};
+        var data2 = {'topic':this.publishTopic, 'jsonData':data};
+//        console.log(data);
+        socket.emit('publishRfSigGenMqttTopic', data2);
+    }
+    stepPower(step)
+    {
+        if (this.settingsDisabled) return;
+        this.freqMhz = Number($(  "#" + this.parentId + "-freqMhz" ).val());
+        this.powLvl = Number($(  "#" + this.parentId + "-powLvl" ).val())
+        this.powLvl = Math.round((this.powLvl + step) * 100) / 100;
+        $( "#" + this.parentId + "-powLvl" ).val(this.powLvl);
+        var rfOn = $( "#" + this.parentId + "-onButton" ).html();
+        var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":rfOn};
+        var data2 = {'topic':this.publishTopic, 'jsonData':data};
+//        console.log(data);
+        socket.emit('publishRfSigGenMqttTopic', data2);
     }
     inputFieldChange(id, storedValue)
     {
