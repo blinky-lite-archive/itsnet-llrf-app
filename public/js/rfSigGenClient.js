@@ -35,7 +35,9 @@ class RfSigGen
       cell = document.createElement("td");
       var button = document.createElement("BUTTON");
       var buttonText = document.createTextNode("Set");     
-      button.style.width = "5em";
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
+      button.style.fontSize = "large";
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-setButton");
@@ -102,7 +104,6 @@ class RfSigGen
       cell = document.createElement("td");
       button = document.createElement("BUTTON");
       buttonText = document.createTextNode("-");     
-      button.style.width = "5em";
       button.style.textAlign = "center";
       button.style.width = upDownButtonWidth;
       button.style.height = upDownButtonHeight;

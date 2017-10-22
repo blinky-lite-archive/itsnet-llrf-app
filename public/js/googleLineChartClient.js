@@ -39,7 +39,7 @@ function drawHistoryLinePlot()
         vAxis: {title: 'Value' },
 //        series: {1: {curveType: 'function'} },
         legend: {position: 'top'},
-        height: 400,
+        height: 380,
         width: 600,
         chartArea:{left:50, top:50, width:'85%', height:'70%'}
       };

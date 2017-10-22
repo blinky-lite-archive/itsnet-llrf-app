@@ -50,7 +50,9 @@ class TimeLineFreq
       cell = document.createElement("td");
       var button = document.createElement("BUTTON");
       var buttonText = document.createTextNode("Set");     
-      button.style.width = "5em";
+      button.style.width = '80px';
+      button.style.height = '35px';
+      button.style.fontSize = "large";
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-setButton");

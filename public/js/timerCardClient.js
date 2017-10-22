@@ -77,7 +77,9 @@ class TimerCard {
       cell = document.createElement("td");
       var button = document.createElement("BUTTON");
       var buttonText = document.createTextNode("Set");     
-      button.style.width = "5em";
+      button.style.width = '80px';
+      button.style.height = '35px';
+      button.style.fontSize = "large";
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", tableId + "-setButton");
@@ -112,7 +114,7 @@ class TimerCard {
       
       row = document.createElement("tr");
       cell = document.createElement("td");
-      cellText = document.createTextNode("Start (uS)");
+      cellText = document.createTextNode("Start");
       cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
       cell.appendChild(cellText);
@@ -141,7 +143,7 @@ class TimerCard {
       
       row = document.createElement("tr");
       cell = document.createElement("td");
-      cellText = document.createTextNode("Stop (uS)");
+      cellText = document.createTextNode("Stop");
       cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
       cell.appendChild(cellText);
