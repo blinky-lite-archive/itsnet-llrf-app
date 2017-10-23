@@ -11,8 +11,8 @@ class RfSigGen
     }
     createGui(parentId)
     {
-      var upDownButtonWidth = '80px';
-      var upDownButtonHeight = '35px';
+      var upDownButtonWidth = '60px';
+      var upDownButtonHeight = '25px';
       var _this = this; // a weird thing to do to define button click
       this.parentId = parentId;
       var guiDiv = document.createElement("div");
@@ -107,7 +107,7 @@ class RfSigGen
       button.style.textAlign = "center";
       button.style.width = upDownButtonWidth;
       button.style.height = upDownButtonHeight;
-      button.style.fontSize = "x-large";
+      button.style.fontSize = "large";
       button.style.background='#00ff00';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-freqDownButton");
@@ -119,11 +119,10 @@ class RfSigGen
       cell = document.createElement("td");
       button = document.createElement("BUTTON");
       buttonText = document.createTextNode("+");     
-      button.style.width = "5em";
       button.style.textAlign = "center";
       button.style.width = upDownButtonWidth;
       button.style.height = upDownButtonHeight;
-      button.style.fontSize = "x-large";
+      button.style.fontSize = "large";
       button.style.background='#ffff00';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-freqUpButton");
@@ -167,7 +166,7 @@ class RfSigGen
       button.style.textAlign = "center";
       button.style.width = upDownButtonWidth;
       button.style.height = upDownButtonHeight;
-      button.style.fontSize = "x-large";
+      button.style.fontSize = "large";
       button.style.background='#00ccff';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-powerDownButton");
@@ -182,7 +181,7 @@ class RfSigGen
       button.style.width = upDownButtonWidth;
       button.style.height = upDownButtonHeight;
       button.style.textAlign = "center";
-      button.style.fontSize = "x-large";
+      button.style.fontSize = "large";
       button.style.background='#ff00ff';
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-powerUpButton");
@@ -203,7 +202,8 @@ class RfSigGen
       cell = document.createElement("td");
       button = document.createElement("BUTTON");
       buttonText = document.createTextNode("OFF");     
-      button.style.width = "5em";
+      button.style.width = upDownButtonWidth;
+      button.style.height = upDownButtonHeight;
       button.style.textAlign = "center";
       button.appendChild(buttonText);
       button.setAttribute("id", parentId + "-onButton");
@@ -219,7 +219,7 @@ class RfSigGen
       tblBody.appendChild(row);
 
       tbl.appendChild(tblBody);
-      guiDiv.style.border = "thin solid #FFFFFF";
+      guiDiv.style.border = "thin solid #0095CD";
       guiDiv.appendChild(tbl);
       $( "#" + parentId ).append(guiDiv);
       document.getElementById(parentId).setAttribute("class", 'widgetDiv');

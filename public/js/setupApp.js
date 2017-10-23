@@ -1,13 +1,3 @@
-var klystronIonPump = 0.0;
-var klystronFwdPwr = 0.0;
-var forwardPowerGaugeData;
-var forwardPowerGaugeChart;
-var forwardPowerGaugeOptions;
-var forwardPowerGaugeParentId = 'googleGauge'; 
-var historyLinePlotParentId = 'historyLinePlot'; 
-var historyLinePlotChart;
-var historyLinePlotChartOptions;
-var historyLinePlotData;
 var startDate = new Date();
 let cpuGearBox = new ByteGearBox();
 let aioGearBox = new ByteGearBox();
@@ -23,6 +13,9 @@ function setupApp()
     setupGaugePlots();
     timeLineFreq.createGui('timeLineFreqGui');
     setupHistoryLinePlot();
+    freqSweepParameters.createGui('freqSweepGui');
+    freqSweepParameters.setRfSigGenId('rfSigGenGui');
+    setupFreqSweepPlot();
 
     socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
     socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });

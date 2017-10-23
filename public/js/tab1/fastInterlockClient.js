@@ -26,6 +26,7 @@ class FastInterlock
      
       var row = document.createElement("tr");
       var cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       var button = document.createElement("BUTTON");
       var buttonText = document.createTextNode("Reset");     
       button.style.textAlign = "center";
@@ -38,12 +39,14 @@ class FastInterlock
       row.appendChild(cell);
       
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       var cellText = document.createTextNode("Reflected Power Trip :");
       cell.style.textAlign = "right";
       cell.appendChild(cellText);
       row.appendChild(cell);
       
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       var img = document.createElement("img");
       img.src = "images/redlight.png";      
       img.setAttribute("class", 'fastInterlockTripLed');
@@ -55,15 +58,18 @@ class FastInterlock
 
       row = document.createElement("tr");
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       row.appendChild(cell);
 
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       cellText = document.createTextNode("CERN Arc Det. Trip:");
       cell.style.textAlign = "right";
       cell.appendChild(cellText);
       row.appendChild(cell);
       
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       img = document.createElement("img");
       img.src = "images/redlight.png";      
       img.setAttribute("class", 'fastInterlockTripLed');
@@ -75,6 +81,7 @@ class FastInterlock
 
       row = document.createElement("tr");
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       button = document.createElement("BUTTON");
       buttonText = document.createTextNode("Pin Switch");     
       button.style.textAlign = "center";
@@ -87,12 +94,14 @@ class FastInterlock
       row.appendChild(cell);
       
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       cellText = document.createTextNode("AFT Arc Det. Trip:");
       cell.style.textAlign = "right";
       cell.appendChild(cellText);
       row.appendChild(cell);
       
       cell = document.createElement("td");
+      cell.setAttribute("class", 'cellText');
       img = document.createElement("img");
       img.src = "images/redlight.png";      
       img.setAttribute("class", 'fastInterlockTripLed');
@@ -103,7 +112,7 @@ class FastInterlock
       tblBody.appendChild(row);
 
       tbl.appendChild(tblBody);
-      guiDiv.style.border = "thin solid #FFFFFF";
+      guiDiv.style.border = "thin solid #0095CD";
       guiDiv.appendChild(tbl);
       $( "#" + parentId ).append(guiDiv);
       document.getElementById(parentId).setAttribute("class", 'widgetDiv');

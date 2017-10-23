@@ -1,3 +1,9 @@
+var forwardPowerGaugeData;
+var forwardPowerGaugeChart;
+var forwardPowerGaugeOptions;
+var forwardPowerGaugeParentId = 'googleGauge'; 
+var klystronFwdPwr = 0.0;
+var klystronDrvPwr = 0.0;
 function setupGaugePlots()
 {
     var tabLabel = document.createElement("Label");
@@ -18,6 +24,7 @@ function setupGaugePlots()
 //    tblBody.appendChild(row);
 //    row = document.createElement("tr");
     cell = document.createElement("td");
+    cell.setAttribute("class", 'cellText');
     cell.setAttribute("id", forwardPowerGaugeParentId + "-powerCell");
     var tbl2 = document.createElement("table");
     tbl2.setAttribute('width', '100%');
@@ -25,15 +32,18 @@ function setupGaugePlots()
      
     var row2 = document.createElement("tr");
     var cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Fwd Pow';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-FwdPowCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'dBm';
     cell2.style.textAlign = "right";
     row2.appendChild(cell2);
@@ -42,15 +52,18 @@ function setupGaugePlots()
 
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Rev Pow';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-RevPowCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'dBm';
     cell2.style.textAlign = "right";
     row2.appendChild(cell2);
@@ -59,15 +72,18 @@ function setupGaugePlots()
 
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Trip Cntr';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-TripCounterCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = ' ';
     cell2.style.textAlign = "right";
     row2.appendChild(cell2);
@@ -76,15 +92,18 @@ function setupGaugePlots()
 
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Trip Rate';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-TripRateCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '/hr';
     cell2.style.textAlign = "right";
     row2.appendChild(cell2);
@@ -93,15 +112,18 @@ function setupGaugePlots()
 
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Trip Date';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-TripDateCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
     cell2.setAttribute("id", forwardPowerGaugeParentId + "-TripDateTimeCell");
     cell2.style.textAlign = "right";
@@ -118,7 +140,7 @@ function setupGaugePlots()
     tbl.appendChild(tblBody);
     guiDiv.appendChild(tbl);
 
-    guiDiv.style.border = "thin solid #FFFFFF";
+    guiDiv.style.border = "thin solid #0095CD";
     $( "#" + forwardPowerGaugeParentId ).append(guiDiv);
     document.getElementById(forwardPowerGaugeParentId).setAttribute("class", 'widgetDiv');
 
@@ -151,6 +173,7 @@ function updateGaugePlots(data)
 {
 //    console.log("Received: " + JSON.stringify(data));
     klystronFwdPwr =  Math.pow(10.0, (Number(data['power1']) - 60.0) / 10.0);
+    klystronDrvPwr =  Math.pow(10.0, (Number(data['power2']) -  0.0) / 10.0);
     forwardPowerGaugeData.setValue(0, 1, klystronFwdPwr);
     forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
     $( "#" + forwardPowerGaugeParentId + "-FwdPowCell" ).html(data['power1']);
