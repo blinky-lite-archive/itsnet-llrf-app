@@ -55,7 +55,7 @@ function drawFreqSweepPlot()
 }
 function updateFreqSweepPlot(freqMhz)
 {
-    freqSweepPlotData.addRow([freqMhz, klystronFwdPwr, klystronDrvPwr]);
+    freqSweepPlotData.addRow([freqMhz, klystronFwdPwr, klystronDrvPwr * 10.0]);
     freqSweepChart.draw(freqSweepPlotData, freqSweepPlotChartOptions);
 }
     

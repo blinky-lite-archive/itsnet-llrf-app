@@ -173,7 +173,7 @@ function updateGaugePlots(data)
 {
 //    console.log("Received: " + JSON.stringify(data));
     klystronFwdPwr =  Math.pow(10.0, (Number(data['power1']) - 60.0) / 10.0);
-    klystronDrvPwr =  Math.pow(10.0, (Number(data['power2']) -  0.0) / 10.0);
+    klystronDrvPwr =  Math.pow(10.0, (Number(data['power2']) - 30.0) / 10.0);
     forwardPowerGaugeData.setValue(0, 1, klystronFwdPwr);
     forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
     $( "#" + forwardPowerGaugeParentId + "-FwdPowCell" ).html(data['power1']);
