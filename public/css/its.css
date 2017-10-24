@@ -1,29 +1,42 @@
 body {
-    background-color: #EEEEEE;
+    background-color: #0095C0;
     font-family: sans-serif;
     font-size: small;
     color: #FFFFFF;
 }
+.ui-tabs .ui-tabs-panel /* just in case you want to change the panel */
+{
+    background: #0095CD;
+}
+.ui-tabs .ui-tabs-nav
+{
+background: #0095df;
+}
 .mainDiv {
-    background-color: #FFFFFF;
+    background-color: #0095CD;
     height: 635px;
+    width: 980px;
+}
+.titleDiv {
+    background-color: #0095CD;
+    height: 30px;
     width: 980px;
 }
 .cellText {
     font-size: small;
-    color: #0095CD;
+    color: #FFFFFF;
 }
 .pageTitle {
-    color: #0095CD;
+    color: #FFFFFF;
     font-size: large;
     font-weight: bold;
     display: table-cell;
     vertical-align: middle;
 }
 .widgetTab {
-    background-color: #0095CD;
+    background-color: #ffffff;
     font-size: medium;
-    color: #FFFFFF;
+    color: #0095CD;
     font-weight: bold;
 }
 .widgetDiv {

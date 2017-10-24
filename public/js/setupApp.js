@@ -11,18 +11,20 @@ function setupApp()
     rfSigGen.createGui('rfSigGenGui');
     fastInterlock.createGui('fastInterlockGui');
     setupGaugePlots();
-    timeLineFreq.createGui('timeLineFreqGui');
     setupHistoryLinePlot();
     freqSweepParameters.createGui('freqSweepGui');
     freqSweepParameters.setRfSigGenId('rfSigGenGui');
     setupFreqSweepPlot();
+    powerSweepParameters.createGui('powerSweepGui');
+    powerSweepParameters.setRfSigGenId('rfSigGenGui');
+    setupPowerSweepPlot();
 
     socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
     socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
     socket.on('itsRfSigGen01/set/rf',      function(data) {rfSigGen.readData(data); });
     socket.on('toshibaFastInterlock/get',  function(data) {fastInterlock.readData(data); });
     socket.on('itsPowerMeter01/get',  function(data) {updateGaugePlots(data); });
-    socket.on('itsClkTrans01/set/freq',  function(data) {timeLineFreq.readData(data); });
+    socket.on('itsClkTrans01/set/freq',  function(data) {updateTimeLineFreq(data); });
 
     socket.on('byteGearBoxArray',  function(dataArray) 
     {

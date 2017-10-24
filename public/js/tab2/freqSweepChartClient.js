@@ -32,7 +32,7 @@ function setupFreqSweepPlot()
     tbl.appendChild(tblBody);
     guiDiv.appendChild(tbl);
 
-    guiDiv.style.border = "thin solid #0095CD";
+    guiDiv.style.border = "thin solid #FFFFFF";
     $( "#" + freqSweepPlotParentId ).append(guiDiv);
     document.getElementById(freqSweepPlotParentId).setAttribute("class", 'widgetDiv');
 

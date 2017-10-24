@@ -155,6 +155,26 @@ function setupGaugePlots()
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
     cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'TL Freq';
+    cell2.style.textAlign = "left";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = '0';
+    cell2.setAttribute("id", forwardPowerGaugeParentId + "-TimeLineFreqPowCell");
+    cell2.style.textAlign = "center";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'Hz';
+    cell2.style.textAlign = "right";
+    row2.appendChild(cell2);
+
+    tblBody2.appendChild(row2);
+
+    row2 = document.createElement("tr");
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'Vac';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
@@ -181,7 +201,7 @@ function setupGaugePlots()
     tbl.appendChild(tblBody);
     guiDiv.appendChild(tbl);
 
-    guiDiv.style.border = "thin solid #0095CD";
+    guiDiv.style.border = "thin solid #FFFFFF";
     $( "#" + forwardPowerGaugeParentId ).append(guiDiv);
     document.getElementById(forwardPowerGaugeParentId).setAttribute("class", 'widgetDiv');
 
@@ -216,7 +236,7 @@ function updateGaugePlots(data)
     var pow1 = Math.round(1000 * Number(data['power1'])) / 1000.0;
     var pow2 = Math.round(1000 * Number(data['power2'])) / 1000.0;
     klystronFwdPwr =  Math.pow(10.0, (pow1 - 60.0) / 10.0);
-    klystronDrvPwr =  Math.pow(10.0, (pow2 - 30.0) / 10.0);
+    klystronDrvPwr =  Math.round(100.0 * Math.pow(10.0, (pow2 - 30.0) / 10.0)) / 100.0;
     klystronGain = Math.round(100.0 * (pow1-pow2)) / 100.0;
     forwardPowerGaugeData.setValue(0, 1, klystronFwdPwr);
     forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
@@ -226,4 +246,7 @@ function updateGaugePlots(data)
     $( "#" + forwardPowerGaugeParentId + "-VacPowCell" ).html(klystronIonPump);
     
 }
-    
+function updateTimeLineFreq(data) 
+{
+    $( "#" + forwardPowerGaugeParentId + "-TimeLineFreqPowCell" ).html(data.freq);
+}

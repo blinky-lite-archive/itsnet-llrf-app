@@ -190,7 +190,7 @@ class TimerCard {
           tblBody.appendChild(row);
       }
       tbl.appendChild(tblBody);
-      divy.style.border = "thin solid #0095CD";
+      divy.style.border = "thin solid #FFFFFF";
       divy.appendChild(tbl);
       document.getElementById(tableId).setAttribute("class", 'widgetDiv');
       document.getElementById(tableId).appendChild(divy);

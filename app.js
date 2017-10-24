@@ -120,11 +120,14 @@ io.on('connection', function(browserClient)
 //    console.log(data);
     deviceMqttArray.forEach(function(deviceMqtt){io.sockets.emit(deviceMqtt.setTopic, deviceMqtt.setMessage);});
     io.sockets.emit('byteGearBoxArray', byteGearBoxArray);
-    fs.writeFile("./public/data/test.dat", 'Hey there! '  + new Date().toUTCString(), function(err) 
-    {
-      if(err) {return console.log(err);}
-      console.log("The file was saved! " + new Date().toUTCString());
-    }); 
+  });
+  browserClient.on('freqSweepData', function(data)
+  {
+    fs.writeFile("./public/data/freqSweepData.csv", data, function(err) {if(err) {return console.log(err);}console.log('Saved FreqSweep Data');}); 
+  });
+  browserClient.on('powerSweepData', function(data)
+  {
+    fs.writeFile("./public/data/powerSweepData.csv", data, function(err) {if(err) {return console.log(err);}console.log('Saved PowerSweep Data');}); 
   });
   browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
   deviceMqttArray.forEach(function(deviceMqtt) 

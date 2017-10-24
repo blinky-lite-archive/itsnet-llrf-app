@@ -25,7 +25,7 @@ function setupHistoryLinePlot()
     tbl.appendChild(tblBody);
     guiDiv.appendChild(tbl);
 
-    guiDiv.style.border = "thin solid #0095CD";
+    guiDiv.style.border = "thin solid #FFFFFF";
     $( "#" + historyLinePlotParentId ).append(guiDiv);
     document.getElementById(historyLinePlotParentId).setAttribute("class", 'widgetDiv');
 
@@ -44,7 +44,7 @@ function drawHistoryLinePlot()
         vAxis: {title: 'Value' },
 //        series: {1: {curveType: 'function'} },
         legend: {position: 'top'},
-        height: 300,
+        height: 320,
         width: 600,
         chartArea:{left:50, top:50, width:'85%', height:'70%'}
       };

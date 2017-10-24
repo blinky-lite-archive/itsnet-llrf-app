@@ -2,9 +2,9 @@
 
 <head>
     <title>ITS LLRF</title>
-    <link type="text/css" rel="stylesheet" href="css/its.css">
  	<link rel="shortcut icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="css/its.css">
     <script src="/js/jquery.js"></script>
     <script src="/js/jquery-ui.min.js"></script>  
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -12,10 +12,11 @@
     <script src="/js/tab1/rfSigGenClient.js"></script>  
     <script src="/js/tab1/fastInterlockClient.js"></script>  
     <script src="/js/tab1/powerGaugeClient.js"></script>  
-    <script src="/js/tab1/timeLineFreqClient.js"></script>  
     <script src="/js/tab1/powerVacLineChartClient.js"></script>  
     <script src="/js/tab2/freqSweepParametersClient.js"></script>  
     <script src="/js/tab2/freqSweepChartClient.js"></script>  
+    <script src="/js/tab3/powerSweepParametersClient.js"></script>  
+    <script src="/js/tab3/powerSweepChartClient.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://cdn.auth0.com/js/lock/10.20.0/lock.min.js"></script>
     <script src="/js/login.js"></script>  
@@ -25,11 +26,11 @@
 
 <body>
     <div class="mainDiv">
-        <div>
+        <div  class="titleDiv">
             <table>
                 <tr>
-                    <td><img src="images/itsLogo.jpg" height="20" width="40"></td>
-                    <td class='pageTitle'>ITS LLRF</td>
+                    <td><img src="images/itsLogo.jpg" height="25" width="45"></td>
+                    <td class='pageTitle' width="935" align="center">ITS LLRF</td>
                 </tr>
             </table>
         </div> 
@@ -45,40 +46,64 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td id='llrfTimerTable'      width="300"></td>
-                                    <td id='modulatorTimerTable' width="300"></td>
-                                    <td id='googleGauge'         width="300"></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr>
-                                    <td id='historyLinePlot' width="610"></td>
-                                    <td width="355">
+                                    <td>
                                         <table>
-                                            <tr><td id='timeLineFreqGui'></td></tr>
-                                            <tr><td id='rfSigGenGui'></td></tr>
-                                            <tr><td id='fastInterlockGui'></td></tr>
+                                            <tr>
+                                                <td id='llrfTimerTable'      width="300"></td>
+                                                <td id='modulatorTimerTable' width="300"></td>
+                                            </tr>
                                         </table>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td id='historyLinePlot' width="610"></td>
+                                </tr>
                             </table>
                         </td>
-                    </tr>
+                        <td>
+                            <table>
+                                <tr><td id='googleGauge'      width="300"></td></tr>
+                                <tr><td id='rfSigGenGui'      width="300"></td></tr>
+                                <tr><td id='fastInterlockGui' width="300"></td></tr>
+                           </table>
+                        </td>
+                    <tr>
                 </table>
         	</div>
         	<div id="tabs-2">
                 <table>
                     <tr>
-                        <td id='freqSweepGui'/>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td id='freqSweepGui'/>
+                                </tr>
+                                <tr>
+                                    <td align="center"><a href="/data/freqSweepData.csv" style="color: #0000ff">Download Data</a></td>
+                                </tr>
+                            </table>
+                        </td>
                         <td id='freqSweepPlot'/>
                     </tr>
                 </table>
         	</div>
-        	<div id="tabs-3"></div>
+        	<div id="tabs-3">
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td id='powerSweepGui'/>
+                                </tr>
+                                <tr>
+                                    <td align="center"><a href="/data/powerSweepData.csv" style="color: #0000ff">Download Data</a></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td id='powerSweepPlot'/>
+                    </tr>
+                </table>
+        	</div>
         </div>
     </div>  
     <script>
@@ -87,8 +112,8 @@
         let modTimer  = new TimerCard('Mod','Ch2','Ch3','Ch4', 'itsClkRecvr02/set/channel', 'Modulator Timer', 'TimerCard02');
         let rfSigGen  = new RfSigGen('itsRfSigGen01/set/rf', 'RF Generator');
         let fastInterlock  = new FastInterlock('Fast Interlock');
-        let timeLineFreq  = new TimeLineFreq('itsClkTrans01/set/freq', 'Time Line');
         let freqSweepParameters  = new FreqSweepParameters('itsRfSigGen01/set/rf');
+        let powerSweepParameters  = new PowerSweepParameters('itsRfSigGen01/set/rf');
 
         $( document ).ready(function() 
         {

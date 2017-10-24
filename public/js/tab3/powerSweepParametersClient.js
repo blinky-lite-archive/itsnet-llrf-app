@@ -1,12 +1,12 @@
-class FreqSweepParameters
+class PowerSweepParameters
 {
     constructor(publishTopic)
     {
-        this.freqStartMhz = 702.0;
-        this.freqStopMhz = 707.0;
-        this.freqStepMhz = 0.1;
+        this.powerStart = -17;
+        this.powerStop = -6;
+        this.powerStep = 0.1;
         this.measDelay = 10.0;
-        this.freqMhz = 702.0;
+        this.power = -17;
         this.publishTopic = publishTopic;
     }
     createGui(parentId)
@@ -33,10 +33,10 @@ class FreqSweepParameters
       cell = document.createElement("td");
       var input = document.createElement("INPUT");
       input.setAttribute("type", "number");
-      input.setAttribute("value", this.freqStartMhz);
+      input.setAttribute("value", this.powerStart);
       input.setAttribute("step", "0.1");
-      input.setAttribute("id",parentId + "-freqStartMhz");
-      input.onchange = function(){ _this.inputFieldChange(parentId + "-freqStartMhz", _this.freqStartMhz)};
+      input.setAttribute("id",parentId + "-powerStart");
+      input.onchange = function(){ _this.inputFieldChange(parentId + "-powerStart", _this.powerStart)};
       input.style.width = "5em";
       cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
@@ -44,7 +44,7 @@ class FreqSweepParameters
       row.appendChild(cell);
 
       cell = document.createElement("td");
-      cellText = document.createTextNode("MHz");
+      cellText = document.createTextNode("dBm");
       cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
       row.appendChild(cell);
@@ -61,10 +61,10 @@ class FreqSweepParameters
       cell = document.createElement("td");
       input = document.createElement("INPUT");
       input.setAttribute("type", "number");
-      input.setAttribute("value", this.freqStopMhz);
+      input.setAttribute("value", this.powerStop);
       input.setAttribute("step", "0.1");
-      input.setAttribute("id",parentId + "-freqStopMhz");
-      input.onchange = function(){ _this.inputFieldChange(parentId + "-freqStopMhz", _this.freqStopMhz)};
+      input.setAttribute("id",parentId + "-powerStop");
+      input.onchange = function(){ _this.inputFieldChange(parentId + "-powerStop", _this.powerStop)};
       input.style.width = "5em";
       cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
@@ -72,7 +72,7 @@ class FreqSweepParameters
       row.appendChild(cell);
 
       cell = document.createElement("td");
-      cellText = document.createTextNode("MHz");
+      cellText = document.createTextNode("dBm");
       cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
       row.appendChild(cell);
@@ -89,10 +89,10 @@ class FreqSweepParameters
       cell = document.createElement("td");
       input = document.createElement("INPUT");
       input.setAttribute("type", "number");
-      input.setAttribute("value", this.freqStepMhz);
+      input.setAttribute("value", this.powerStep);
       input.setAttribute("step", "0.1");
-      input.setAttribute("id",parentId + "-freqStepMhz");
-      input.onchange = function(){ _this.inputFieldChange(parentId + "-freqStepMhz", _this.freqStepMhz)};
+      input.setAttribute("id",parentId + "-powerStep");
+      input.onchange = function(){ _this.inputFieldChange(parentId + "-powerStep", _this.powerStep)};
       input.style.width = "5em";
       cell.setAttribute("class", 'cellText');
       cell.style.textAlign = "center";
@@ -100,7 +100,7 @@ class FreqSweepParameters
       row.appendChild(cell);
 
       cell = document.createElement("td");
-      cellText = document.createTextNode("MHz");
+      cellText = document.createTextNode("dBm");
       cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
       row.appendChild(cell);
@@ -149,9 +149,9 @@ class FreqSweepParameters
       button.style.height = '30px';
       button.style.textAlign = "center";
       button.appendChild(buttonText);
-      button.setAttribute("id", parentId + "-freqSweepButton");
+      button.setAttribute("id", parentId + "-powerSweepButton");
       button.setAttribute("class", 'powOnButton');
-      button.onclick = function() { _this.toggleFreqSweepButton()}; 
+      button.onclick = function() { _this.togglePowerSweepButton()}; 
       cell.style.textAlign = "center";
       cell.appendChild(button);
       row.appendChild(cell);
@@ -169,55 +169,55 @@ class FreqSweepParameters
     {
         this.rfSigGenId = rfSigGenId;
     }
-    toggleFreqSweepButton()
+    togglePowerSweepButton()
     {
-        var freqSweepOn = $( "#" + this.parentId + "-freqSweepButton" ).html();
-        if (freqSweepOn == "Stop")
+        var powerSweepOn = $( "#" + this.parentId + "-powerSweepButton" ).html();
+        if (powerSweepOn == "Stop")
         {
-            $( "#" + this.parentId + "-freqSweepButton" ).html("Start");
-            $( "#" + this.parentId + "-freqSweepButton" ).attr('class','powOnButton');
-            clearInterval(this.freqSweepTimer);
+            $( "#" + this.parentId + "-powerSweepButton" ).html("Start");
+            $( "#" + this.parentId + "-powerSweepButton" ).attr('class','powOnButton');
+            clearInterval(this.powerSweepTimer);
         }
         else
         {
-            $( "#" + this.parentId + "-freqSweepButton" ).html("Stop");
-            $( "#" + this.parentId + "-freqSweepButton" ).attr('class','powOffButton');
+            $( "#" + this.parentId + "-powerSweepButton" ).html("Stop");
+            $( "#" + this.parentId + "-powerSweepButton" ).attr('class','powOffButton');
 
-            this.freqStartMhz = Number($(  "#" + this.parentId + "-freqStartMhz" ).val())
-            this.freqStopMhz = Number($(  "#" + this.parentId + "-freqStopMhz" ).val())
-            this.freqStepMhz = Number($(  "#" + this.parentId + "-freqStepMhz" ).val())
+            this.powerStart = Number($(  "#" + this.parentId + "-powerStart" ).val())
+            this.powerStop = Number($(  "#" + this.parentId + "-powerStop" ).val())
+            this.powerStep = Number($(  "#" + this.parentId + "-powerStep" ).val())
             this.measDelay = Number($(  "#" + this.parentId + "-measDelay" ).val())
-            this.freqMhz = this.freqStartMhz;
-            this.powLvl = Number($(  "#" + this.rfSigGenId + "-powLvl" ).val());
+            this.power = this.powerStart;
+            this.freqMhz = Number($(  "#" + this.rfSigGenId + "-freqMhz" ).val());
             
-            freqSweepPlotData.removeRows(0,freqSweepPlotData.getNumberOfRows());
+            powerSweepPlotData.removeRows(0,powerSweepPlotData.getNumberOfRows());
 
-            var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":'ON'};
+            var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.power.toString(), "rfPowOn":'ON'};
             var data2 = {'topic':this.publishTopic, 'jsonData':data};
             socket.emit('publishRfSigGenMqttTopic', data2);
             console.log(data);
             var _this = this; // a weird thing to do to define button click
-            this.freqSweepTimer = setInterval(function(){_this.stepFrequency();}, 1000 * this.measDelay);
+            this.powerSweepTimer = setInterval(function(){_this.stepPower();}, 1000 * this.measDelay);
         }
     }
-    stepFrequency()
+    stepPower()
     {
-        updateFreqSweepPlot(this.freqMhz);
-        this.freqMhz = Math.round((this.freqMhz + this.freqStepMhz) * 100.0) / 100.0;
-        if (this.freqMhz <= this.freqStopMhz)
+        updatePowerSweepPlot(this.power);
+        this.power = Math.round((this.power + this.powerStep) * 100.0) / 100.0;
+        if (this.power <= this.powerStop)
         {
-            var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.powLvl.toString(), "rfPowOn":'ON'};
+            var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.power.toString(), "rfPowOn":'ON'};
             var data2 = {'topic':this.publishTopic, 'jsonData':data};
             console.log(data);
             socket.emit('publishRfSigGenMqttTopic', data2);
         }
         else
         {
-            $( "#" + this.parentId + "-freqSweepButton" ).html("Start");
-            $( "#" + this.parentId + "-freqSweepButton" ).attr('class','powOnButton');
-            clearInterval(this.freqSweepTimer);
-            var csv = google.visualization.dataTableToCsv(freqSweepPlotData);
-            socket.emit('freqSweepData', csv);
+            $( "#" + this.parentId + "-powerSweepButton" ).html("Start");
+            $( "#" + this.parentId + "-powerSweepButton" ).attr('class','powOnButton');
+            clearInterval(this.powerSweepTimer);
+            var csv = google.visualization.dataTableToCsv(powerSweepPlotData);
+            socket.emit('powerSweepData', csv);
         }
     }
     inputFieldChange(id, storedValue)

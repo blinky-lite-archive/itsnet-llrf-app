@@ -112,7 +112,7 @@ class FastInterlock
       tblBody.appendChild(row);
 
       tbl.appendChild(tblBody);
-      guiDiv.style.border = "thin solid #0095CD";
+      guiDiv.style.border = "thin solid #FFFFFF";
       guiDiv.appendChild(tbl);
       $( "#" + parentId ).append(guiDiv);
       document.getElementById(parentId).setAttribute("class", 'widgetDiv');
