@@ -4,6 +4,7 @@ var forwardPowerGaugeOptions;
 var forwardPowerGaugeParentId = 'googleGauge'; 
 var klystronFwdPwr = 0.0;
 var klystronDrvPwr = 0.0;
+var klystronGain = 0.0;
 function setupGaugePlots()
 {
     var tabLabel = document.createElement("Label");
@@ -53,18 +54,38 @@ function setupGaugePlots()
     row2 = document.createElement("tr");
     cell2 = document.createElement("td");
     cell2.setAttribute("class", 'cellText');
-    cell2.innerHTML = 'Rev Pow';
+    cell2.innerHTML = 'Drv Pow';
     cell2.style.textAlign = "left";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
     cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = '0';
-    cell2.setAttribute("id", forwardPowerGaugeParentId + "-RevPowCell");
+    cell2.setAttribute("id", forwardPowerGaugeParentId + "-DrvPowCell");
     cell2.style.textAlign = "center";
     row2.appendChild(cell2);
     cell2 = document.createElement("td");
     cell2.setAttribute("class", 'cellText');
     cell2.innerHTML = 'dBm';
+    cell2.style.textAlign = "right";
+    row2.appendChild(cell2);
+
+    tblBody2.appendChild(row2);
+
+    row2 = document.createElement("tr");
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'Gain';
+    cell2.style.textAlign = "left";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = '0';
+    cell2.setAttribute("id", forwardPowerGaugeParentId + "-GainPowCell");
+    cell2.style.textAlign = "center";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'dB';
     cell2.style.textAlign = "right";
     row2.appendChild(cell2);
 
@@ -131,6 +152,26 @@ function setupGaugePlots()
 
     tblBody2.appendChild(row2);
 
+    row2 = document.createElement("tr");
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'Vac';
+    cell2.style.textAlign = "left";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = '0';
+    cell2.setAttribute("id", forwardPowerGaugeParentId + "-VacPowCell");
+    cell2.style.textAlign = "center";
+    row2.appendChild(cell2);
+    cell2 = document.createElement("td");
+    cell2.setAttribute("class", 'cellText');
+    cell2.innerHTML = 'nA';
+    cell2.style.textAlign = "right";
+    row2.appendChild(cell2);
+
+    tblBody2.appendChild(row2);
+
     tbl2.appendChild(tblBody2);
     cell.appendChild(tbl2);
 
@@ -172,12 +213,17 @@ function drawChart()
 function updateGaugePlots(data)
 {
 //    console.log("Received: " + JSON.stringify(data));
-    klystronFwdPwr =  Math.pow(10.0, (Number(data['power1']) - 60.0) / 10.0);
-    klystronDrvPwr =  Math.pow(10.0, (Number(data['power2']) - 30.0) / 10.0);
+    var pow1 = Math.round(1000 * Number(data['power1'])) / 1000.0;
+    var pow2 = Math.round(1000 * Number(data['power2'])) / 1000.0;
+    klystronFwdPwr =  Math.pow(10.0, (pow1 - 60.0) / 10.0);
+    klystronDrvPwr =  Math.pow(10.0, (pow2 - 30.0) / 10.0);
+    klystronGain = Math.round(100.0 * (pow1-pow2)) / 100.0;
     forwardPowerGaugeData.setValue(0, 1, klystronFwdPwr);
     forwardPowerGaugeChart.draw(forwardPowerGaugeData, forwardPowerGaugeOptions);
-    $( "#" + forwardPowerGaugeParentId + "-FwdPowCell" ).html(data['power1']);
-    $( "#" + forwardPowerGaugeParentId + "-RevPowCell" ).html(data['power2']);
+    $( "#" + forwardPowerGaugeParentId + "-FwdPowCell" ).html(pow1);
+    $( "#" + forwardPowerGaugeParentId + "-DrvPowCell" ).html(pow2);
+    $( "#" + forwardPowerGaugeParentId + "-GainPowCell" ).html(klystronGain);
+    $( "#" + forwardPowerGaugeParentId + "-VacPowCell" ).html(klystronIonPump);
     
 }
     

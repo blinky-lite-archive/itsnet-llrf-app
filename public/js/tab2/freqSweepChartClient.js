@@ -44,7 +44,7 @@ function drawFreqSweepPlot()
     freqSweepPlotData = new google.visualization.DataTable();
     freqSweepPlotData.addColumn('number', 'X');
     freqSweepPlotData.addColumn('number', 'Output Power (kW)');
-    freqSweepPlotData.addColumn('number', 'Drive Power x 10 (kW)');
+    freqSweepPlotData.addColumn('number', 'Gain x 10 (dB)');
     freqSweepPlotData.addRow([703, 500, 200]);
     freqSweepPlotData.addRow([704, 600, 400]);
     freqSweepPlotData.addRow([705, 300, 100]);
@@ -55,7 +55,7 @@ function drawFreqSweepPlot()
 }
 function updateFreqSweepPlot(freqMhz)
 {
-    freqSweepPlotData.addRow([freqMhz, klystronFwdPwr, klystronDrvPwr * 10.0]);
+    freqSweepPlotData.addRow([freqMhz, klystronFwdPwr, klystronGain * 10.0]);
     freqSweepChart.draw(freqSweepPlotData, freqSweepPlotChartOptions);
 }
     

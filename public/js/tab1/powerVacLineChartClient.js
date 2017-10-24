@@ -55,6 +55,7 @@ function updateHistoryLinePlot(aioByteGearBoxClass)
 {
     var maxTime = 3600;
     klystronIonPump = Number(aioByteGearBoxClass.getGearBoxByteTooth('EGU', aioByteGearBoxClass.getGearBoxByteGear('KLY_IP_ISn_Current'), true).value);
+    klystronIonPump = Math.round(100.0 * klystronIonPump) / 100.0;
     var now = new Date();
     var secs = (now.getTime() - startDate.getTime()) / 1000;
     if (secs > maxTime) historyLinePlotData.removeRow(0);

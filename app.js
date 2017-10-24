@@ -3,6 +3,7 @@ var http = require('http');
 var socketio = require('socket.io');
 var mqtt = require('mqtt');
 var byteGearBoxForNode = require('./byteGearBoxForNode.js')
+var fs = require('fs');
 
 var deviceMqttArray = 
 [
@@ -96,7 +97,8 @@ app.set('port', (process.env.PORT || 1337));
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res, next){
+app.get('/', function(req, res, next){var fs = require('fs');
+
   res.sendFile(__dirname + '/index.html');
   ipAddress = req.headers['x-forwarded-for'] || 
      req.connection.remoteAddress || 
@@ -118,6 +120,11 @@ io.on('connection', function(browserClient)
 //    console.log(data);
     deviceMqttArray.forEach(function(deviceMqtt){io.sockets.emit(deviceMqtt.setTopic, deviceMqtt.setMessage);});
     io.sockets.emit('byteGearBoxArray', byteGearBoxArray);
+    fs.writeFile("./public/data/test.dat", 'Hey there! '  + new Date().toUTCString(), function(err) 
+    {
+      if(err) {return console.log(err);}
+      console.log("The file was saved! " + new Date().toUTCString());
+    }); 
   });
   browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
   deviceMqttArray.forEach(function(deviceMqtt) 
