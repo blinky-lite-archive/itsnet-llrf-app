@@ -97,7 +97,7 @@ class TimerCard {
 
       row = document.createElement("tr");
       cell = document.createElement("td");
-      var cellText = document.createTextNode("");document.createElement("INPUT");
+      var cellText = document.createTextNode("");
       cell.setAttribute("class", 'cellText');
       cell.appendChild(cellText);
       row.appendChild(cell);

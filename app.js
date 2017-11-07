@@ -82,7 +82,7 @@ var io = socketio(server);
 var clientsConnected = 0;
 var ipAddress;
 
-var mqttClient = mqtt.connect('tcp://broker.shiftr.io', 
+var mqttClient = mqtt.connect(process.env.MQTTIP, 
 {
   clientId: 'itsnet-llrf-app',
   username: process.env.MQTTUSER,
