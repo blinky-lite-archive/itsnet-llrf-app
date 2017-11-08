@@ -18,7 +18,9 @@ function setupApp()
     powerSweepParameters.createGui('powerSweepGui');
     powerSweepParameters.setRfSigGenId('rfSigGenGui');
     setupPowerSweepPlot();
-
+    conditioningParameters.createGui('conditioningGui');;
+    conditioningParameters.setRfSigGenParams('rfSigGenGui', 'itsRfSigGen01/set/rf', fastInterlock);
+    
     socket.on('itsClkRecvr01/set/channel', function(data) {llrfTimer.readData(data); });
     socket.on('itsClkRecvr02/set/channel', function(data) {modTimer.readData(data); });
     socket.on('itsRfSigGen01/set/rf',      function(data) {rfSigGen.readData(data); });

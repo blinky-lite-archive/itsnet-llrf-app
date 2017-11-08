@@ -84,7 +84,7 @@ var ipAddress;
 
 var mqttClient = mqtt.connect(process.env.MQTTIP, 
 {
-  clientId: 'itsnet-llrf-app',
+  clientId: 'itsnet-llrf-app2',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
@@ -195,6 +195,7 @@ function handleMqttMessage(topic, message)
 function connectToMqtt()
 {
   console.log('Connected to MQTT broker.');
+  
   byteGearBoxArray.forEach(function(byteGearBox)
   {
     byteGearBoxForNode.getByteGearBoxFromUrl(byteGearBox.parentUrl + byteGearBox.topic + '.json', function(jsonData) 

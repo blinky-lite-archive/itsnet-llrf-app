@@ -294,7 +294,7 @@ class RfSigGen
     }
     readData(data)
     {
-        console.log("Received: " + JSON.stringify(data));
+//        console.log("Received: " + JSON.stringify(data));
         this.freqMhz = Number(data['rfFreq']);
         $( "#" + this.parentId + "-freqMhz" ).val(this.freqMhz);
         if (!this.settingsDisabled) $( "#" + this.parentId + "-freqMhz" ).attr('class','inputFieldNormal');

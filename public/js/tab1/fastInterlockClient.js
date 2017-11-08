@@ -5,6 +5,7 @@ class FastInterlock
         this.label = label;
         this.settingsDisabled = true;
         this.pinSwitchOn = false;
+        this.tripDetected = false;
     }
     setCpuByteGearBox(cpuByteGearBox)
     {
@@ -119,6 +120,7 @@ class FastInterlock
     }
     reset()
     {
+        $('#' + this.parentId + '-resetButton').attr('class','resetFastInterlockButtonPressed');
         this.cpuByteGearBox.getGearBoxByteTooth('RESET',       this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'TRUE';
         this.cpuByteGearBox.getGearBoxByteTooth('OFF_CMD',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
         this.cpuByteGearBox.getGearBoxByteTooth('AUX_CMD',     this.cpuByteGearBox.getGearBoxByteGear('CPU_CONF'), false).value = 'FALSE';
@@ -143,7 +145,16 @@ class FastInterlock
 
         var data = {"reset":'TRUE'};
         var data2 = {'topic':'toshibaFastInterlock/set', 'jsonData':data};
-        setTimeout(function(){socket.emit('publishFastInterlockMqttTopic', data2);}, 5000);
+        var _this = this; // a weird thing to do to define button click
+        setTimeout(function()
+        {
+            $('#' + _this.parentId + '-resetButton').attr('class','resetFastInterlockButton');
+        }, 500);
+        setTimeout(function()
+        {
+            socket.emit('publishFastInterlockMqttTopic', data2);
+            this.tripDetected = false;
+        }, 5000);
         
     }
     pinSwitch()
@@ -154,9 +165,13 @@ class FastInterlock
         var data2 = {'topic':'toshibaFastInterlock/set', 'jsonData':data};
         socket.emit('publishFastInterlockMqttTopic', data2);
     }
+    fastTripDetected()
+    {
+        return this.tripDetected;
+    }
     readData(data)
     {
-        console.log("Received: " + JSON.stringify(data));
+//        console.log("Received: " + JSON.stringify(data));
 //      "reflPowLvl":"0.143", "pinSwitch":"ON", "trip":"TRUE", "tripType":"arcDet"
         if (data['pinSwitch'] == 'ON')
         {
@@ -171,8 +186,10 @@ class FastInterlock
         $('#' + this.parentId + '-reflectedPowerTripLed').attr('src','images/greenlight.png');
         $('#' + this.parentId + '-cernArcTripLed').attr('src','images/greenlight.png');
         $('#' + this.parentId + '-aftArcTripLed').attr('src','images/greenlight.png');
+        this.tripDetected = false;
         if (data['trip'] == 'TRUE')
         {
+            this.tripDetected = true;
             if (data['tripType'] == 'reflPower') $('#' + this.parentId + '-reflectedPowerTripLed').attr('src','images/redlight.png');
             if (data['tripType'] == 'arcDet') $('#' + this.parentId + '-cernArcTripLed').attr('src','images/redlight.png');
             if (data['tripType'] == 'aftDet') $('#' + this.parentId + '-aftArcTripLed').attr('src','images/redlight.png');

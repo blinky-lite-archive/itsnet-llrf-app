@@ -17,6 +17,7 @@
     <script src="/js/tab2/freqSweepChartClient.js"></script>  
     <script src="/js/tab3/powerSweepParametersClient.js"></script>  
     <script src="/js/tab3/powerSweepChartClient.js"></script>  
+    <script src="/js/tab4/conditioningParametersClient.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script src="https://cdn.auth0.com/js/lock/10.20.0/lock.min.js"></script>
     <script src="/js/login.js"></script>  
@@ -39,6 +40,7 @@
         		<li><a href="#tabs-1">Overview</a></li>
         		<li><a href="#tabs-2">FrequencyPlot</a></li>
         		<li><a href="#tabs-3">Power Plot</a></li>
+                <li><a href="#tabs-4">Klystron Conditioning</a></li>
         	</ul>
         	<div id="tabs-1">
                 <table>
@@ -104,6 +106,13 @@
                     </tr>
                 </table>
         	</div>
+        	<div id="tabs-4">
+                <table>
+                    <tr>
+                        <td id='conditioningGui'/>
+                    </tr>
+                </table>
+        	</div>
         </div>
     </div>  
     <script>
@@ -114,7 +123,7 @@
         let fastInterlock  = new FastInterlock('Fast Interlock');
         let freqSweepParameters  = new FreqSweepParameters('itsRfSigGen01/set/rf');
         let powerSweepParameters  = new PowerSweepParameters('itsRfSigGen01/set/rf');
-
+        let conditioningParameters = new ConditioningParameters();
         $( document ).ready(function() 
         {
             $( "#tabs" ).tabs();
