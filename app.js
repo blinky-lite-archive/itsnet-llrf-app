@@ -84,7 +84,7 @@ var ipAddress;
 
 var mqttClient = mqtt.connect(process.env.MQTTIP, 
 {
-  clientId: 'itsnet-llrf-app2',
+  clientId: 'itsnet-llrf-app',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
