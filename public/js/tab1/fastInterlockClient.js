@@ -6,6 +6,7 @@ class FastInterlock
         this.settingsDisabled = true;
         this.pinSwitchOn = false;
         this.tripDetected = false;
+        this.tripCounter = '-1';
     }
     setCpuByteGearBox(cpuByteGearBox)
     {
@@ -169,6 +170,10 @@ class FastInterlock
     {
         return this.tripDetected;
     }
+    myTripCounter()
+    {
+        return this.tripCounter;
+    }
     readData(data)
     {
 //        console.log("Received: " + JSON.stringify(data));
@@ -195,6 +200,7 @@ class FastInterlock
             if (data['tripType'] == 'aftDet') $('#' + this.parentId + '-aftArcTripLed').attr('src','images/redlight.png');
         }
         $( "#" + 'googleGauge' + "-TripCounterCell" ).html(data['tripCounter']);
+        this.tripCounter = data['tripCounter'];
         $( "#" + 'googleGauge' + "-TripRateCell" ).html(data['tripRate']);
 
         var tripDate = new Date(Number(data['tripDate']))

@@ -84,7 +84,7 @@ var ipAddress;
 
 var mqttClient = mqtt.connect(process.env.MQTTIP, 
 {
-  clientId: 'itsnet-llrf-app',
+  clientId: 'itsnet-llrf-app3',
   username: process.env.MQTTUSER,
   password: process.env.MQTTKEY,
   clean:false
@@ -115,6 +115,7 @@ io.on('connection', function(browserClient)
 {
   console.log('Number of connected clients: ' + ++clientsConnected);
   browserClient.on('join', function(data){console.log(data);});
+  browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
   browserClient.on('initData', function(data)
   {
 //    console.log(data);
@@ -129,7 +130,7 @@ io.on('connection', function(browserClient)
   {
     fs.writeFile("./public/data/powerSweepData.csv", data, function(err) {if(err) {return console.log(err);}console.log('Saved PowerSweep Data');}); 
   });
-  browserClient.on('disconnect', function() {console.log('Number of connected clients: ' + --clientsConnected);});
+  browserClient.on('publishPulseTripMqttTopic', function(data){publishMqtt(data); });
   deviceMqttArray.forEach(function(deviceMqtt) 
   {
 //    console.log('publish' + deviceMqtt.name +'MqttTopic');

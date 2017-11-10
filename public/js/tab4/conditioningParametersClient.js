@@ -8,6 +8,7 @@ class ConditioningParameters
         this.stepDelay = 1;
         this.maxPower = -19;
         this.waitForReset = false;
+        this.pinSwitchOnDate = new Date();
     }
     createGui(parentId)
     {
@@ -225,11 +226,10 @@ class ConditioningParameters
             var data2 = {'topic':'toshibaFastInterlock/set', 'jsonData':data};
             socket.emit('publishFastInterlockMqttTopic', data2);
 
-            
             var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.power.toString(), "rfPowOn":'ON'};
             var data2 = {'topic':this.rfSigGenPublishTopic, 'jsonData':data};
             socket.emit('publishRfSigGenMqttTopic', data2);
-            console.log(data);
+            this.pinSwitchOnDate = new Date();
             var _this = this; // a weird thing to do to define button click
             this.conditioningTimer = setInterval(function(){_this.stepPower();}, 1000 * this.stepDelay);
         }
@@ -239,10 +239,15 @@ class ConditioningParameters
         if (this.waitForReset) return;
         if (this.fastInterlock.fastTripDetected())
         {
+            var tripDate = new Date();
+            var upTime = Math.round((tripDate.getTime() - this.pinSwitchOnDate.getTime()) / 1000);
+            var data = {"uptime":upTime.toString(), 'tripcounter':this.fastInterlock.myTripCounter()};
+            var data2 = {'topic':'toshiba/uptime', 'jsonData':data};
+            socket.emit('publishPulseTripMqttTopic', data2);
+
             this.power = this.resetLevel;
-            var data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.power.toString(), "rfPowOn":'ON'};
-            var data2 = {'topic':this.rfSigGenPublishTopic, 'jsonData':data};
-            console.log(data);
+            data = {"rfFreq":this.freqMhz.toString(), "rfPowLvl":this.power.toString(), "rfPowOn":'ON'};
+            data2 = {'topic':this.rfSigGenPublishTopic, 'jsonData':data};
             socket.emit('publishRfSigGenMqttTopic', data2);
             this.fastInterlock.reset();
             this.waitForReset = true;
@@ -254,6 +259,7 @@ class ConditioningParameters
                 var data = {"pinSwitch":'ON'};
                 var data2 = {'topic':'toshibaFastInterlock/set', 'jsonData':data};
                 socket.emit('publishFastInterlockMqttTopic', data2);
+                _this.pinSwitchOnDate = new Date();
             }, this.restartTimeout * 1000);
             return;
         }
